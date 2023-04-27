@@ -45,7 +45,7 @@ func TestAddUser(t *testing.T) {
 
 	e := d.CheckUser(u.Id)
 	if !e {
-		log.Fatalln(errors.New("failed to add user"))
+		log.Fatalln(errors.New("failed to user"))
 	}
 	d.DeleteUser(u.Id)
 }
@@ -95,10 +95,10 @@ func TestDeleteUser(t *testing.T) {
 
 	d.AddUser(&u)
 
-	e := d.CheckUser(u.Id)
 	d.DeleteUser(u.Id)
+	e := d.CheckUser(u.Id)
 	if e {
-		log.Fatalln(errors.New("failed to add user"))
+		log.Fatalln(errors.New("failed to delete user"))
 	}
 }
 
