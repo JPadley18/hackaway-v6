@@ -1,6 +1,7 @@
-package database
+package sql
 
 import (
+	"cordle/pkg/util"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -14,13 +15,13 @@ type connData struct {
 	Database string
 }
 
-func connStr() string {
-	content, err := os.ReadFile("database/config.json")
-	checkErrMsg(err, "Error opening file: ")
+func connStr(path string) string {
+	content, err := os.ReadFile(path)
+	util.CheckErrMsg(err, "Error opening file: ")
 
 	cd := connData{}
 	err = json.Unmarshal(content, &cd)
-	checkErrMsg(err, "Error duing unmarshall(): ")
+	util.CheckErrMsg(err, "Error duing unmarshall(): ")
 
 	return fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s",

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"cordle/util"
+	"cordle/pkg/util"
 	"encoding/json"
 	"os"
 )
@@ -16,13 +16,13 @@ type Config struct {
 func LoadConfig(path string) Config {
 	// Open the configuration file
 	file, err := os.ReadFile(path)
-	util.CheckError(err, "Failed to read config file")
+	util.CheckErrMsg(err, "Failed to read config file")
 
 	// Create a new Config struct to return
 	ret := Config{}
 	// Decode JSON into the struct
 	err = json.Unmarshal(file, &ret)
-	util.CheckError(err, "Failed to decode JSON from config file")
+	util.CheckErrMsg(err, "Failed to decode JSON from config file")
 
 	return ret
 }

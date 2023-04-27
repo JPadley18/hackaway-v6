@@ -1,7 +1,7 @@
 package results
 
 import (
-	"cordle/database"
+	"cordle/internal/database"
 )
 
 func winCalc(attempts int, player *database.User) {

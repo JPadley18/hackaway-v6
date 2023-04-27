@@ -1,12 +1,12 @@
 package statistics
 
 import (
-	"cordle/database"
+	"cordle/internal/database"
 	"fmt"
 )
 
-func GetLeaderboard() string {
-	topTen := database.GetTop()
+func GetLeaderboard(d *database.Db) string {
+	topTen := d.ReadTop()
 	output := "``\n"
 	for index, user := range topTen {
 		output += fmt.Sprintf(

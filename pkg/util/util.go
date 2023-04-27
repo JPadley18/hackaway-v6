@@ -1,23 +1,24 @@
-package database
+package util
 
 import (
 	"database/sql"
 	"log"
 )
 
-func checkErr(err error) {
+// CheckError logs a fatal error if err != nil
+func CheckErr(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func checkErrMsg(err error, msg string) {
+func CheckErrMsg(err error, msg string) {
 	if err != nil {
 		log.Fatal(msg, err)
 	}
 }
 
-func checkRow(err error) (bool, error) {
+func CheckRow(err error) (bool, error) {
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return false, err
