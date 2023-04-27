@@ -7,4 +7,5 @@ dev:
 .PHONY: test
 
 test:
-	@go test -cover ./test/...
+	go mod tidy
+	go test -cover ./test/...

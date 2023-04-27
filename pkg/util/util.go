@@ -8,20 +8,20 @@ import (
 // CheckError logs a fatal error if err != nil
 func CheckErr(err error) {
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 }
 
 func CheckErrMsg(err error, msg string) {
 	if err != nil {
-		log.Fatal(msg, err)
+		log.Fatalln(msg, err)
 	}
 }
 
 func CheckRow(err error) (bool, error) {
 	if err != nil {
 		if err != sql.ErrNoRows {
-			return false, err
+			log.Fatalln(err)
 		}
 		return false, nil
 	}

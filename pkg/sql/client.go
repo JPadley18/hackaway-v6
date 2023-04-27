@@ -3,6 +3,7 @@ package sql
 import (
 	"cordle/pkg/util"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
