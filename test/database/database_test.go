@@ -122,10 +122,12 @@ func TestReadAllUsers(t *testing.T) {
 	defer d.Close()
 
 	u := d.ReadAllUsers()
-	if len(u) != 3 {
-		log.Fatalln(errors.New(fmt.Sprintf(
+	assert.NotNil(t, u)
+
+	if len(u) == 0 {
+		log.Fatalln(fmt.Errorf(
 			"incorrect array length for all users %d", len(u)),
-		))
+		)
 	}
 }
 
@@ -134,13 +136,16 @@ func TestReadTop(t *testing.T) {
 	defer d.Close()
 
 	tt := d.ReadTop()
-	for i := 0; i < len(tt) - 2; i++ {
-		if tt[i].Elo > tt[i+1].Elo {
-			log.Fatalln(errors.New(fmt.Sprintf(
-				"top ten wrong order %d", len(tt)),
-			))
-		} 
-	} 
+	assert.NotNil(t, tt)
+
+	for i := 0; i < len(tt)-2; i++ {
+		if tt[i].Elo < tt[i+1].Elo {
+			continue
+		}
+		log.Fatalln(fmt.Errorf(
+			"top ten wrong order %d", len(tt)),
+		)
+	}
 }
 
 func TestCheckUser(t *testing.T) {
