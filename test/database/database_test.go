@@ -149,7 +149,24 @@ func TestReadTop(t *testing.T) {
 }
 
 func TestCheckUser(t *testing.T) {
+	d = database.NewDb(conf)
+	defer d.Close()
 
+	e := d.CheckUser(7123)
+	if !e {
+		log.Fatalln(fmt.Errorf(
+			"wrong existing value returned %t", e),
+		)
+	} 
+	assert.True(t, e)
+	
+	e = d.CheckUser(517123)
+	if e {
+		log.Fatalln(fmt.Errorf(
+			"wrong existing value returned %t", e),
+		)
+	} 
+	assert.False(t, e)
 }
 
 func TestDeleteUser(t *testing.T) {
