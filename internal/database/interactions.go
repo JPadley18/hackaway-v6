@@ -21,20 +21,20 @@ func (d *Db) AddUser(user *users.User) {
 	defer insert.Close()
 }
 
-func (d *Db) AddUsers(users []users.User) {
-	for _, user := range users {
+func (d *Db) AddUsers(users *[]users.User) {
+	for _, user := range *users {
 		d.AddUser(&user)
 	}
 }
 
-func (d *Db) UpdateUser(user *User) {
+func (d *Db) UpdateUser(user *users.User) {
 	d.ClientMu.Lock()
 	defer d.ClientMu.Unlock()
 	db := d.Client.Db
 
 	updates := user.ToSqlUpdate()
 	query := fmt.Sprintf(
-		"id='%d'",
+		"id=%d",
 		user.Id,
 	)
 
@@ -50,13 +50,13 @@ func (d *Db) UpdateUser(user *User) {
 	defer update.Close()
 }
 
-func (d *Db) UpdateUsers(users *[]User) {
+func (d *Db) UpdateUsers(users *[]users.User) {
 	for _, user := range *users {
 		d.UpdateUser(&user)
 	}
 }
 
-func (d *Db) ReadUser(id int) User {
+func (d *Db) ReadUser(id int) users.User {
 	d.ClientMu.Lock()
 	defer d.ClientMu.Unlock()
 	db := d.Client.Db
@@ -69,7 +69,7 @@ func (d *Db) ReadUser(id int) User {
 	util.CheckErr(err)
 	defer result.Close()
 
-	var user User
+	var user users.User
 	result.Next()
 	err = result.StructScan(&user)
 
@@ -77,7 +77,7 @@ func (d *Db) ReadUser(id int) User {
 	return user
 }
 
-func (d *Db) ReadUsers() []User {
+func (d *Db) ReadAllUsers() []users.User {
 	d.ClientMu.Lock()
 	defer d.ClientMu.Unlock()
 	db := d.Client.Db
@@ -86,35 +86,37 @@ func (d *Db) ReadUsers() []User {
 	util.CheckErr(err)
 	defer result.Close()
 
-	var users []User
+	us := make([]users.User, 0)
+	var u users.User
 	for i := 0; result.Next(); i++ {
-		err := result.StructScan(&users[i])
+		err := result.StructScan(&u)
 		if err != nil {
 			panic(err.Error())
 		}
+		us = append(us, u)
 	}
 
-	return users
+	return us
 }
 
-func (d *Db) ReadTop() []User {
+func (d *Db) ReadTop() []users.User {
 	d.ClientMu.Lock()
 	defer d.ClientMu.Unlock()
 	db := d.Client.Db
 
-	results, err := db.Queryx("select * from users order by elo, name asc limit 0,10;")
+	results, err := db.Queryx("select * from users order by elo, id asc limit 0,10;")
 	util.CheckErr(err)
 	defer results.Close()
 
-	topTen := make([]User, 0)
+	tt := make([]users.User, 0)
+	var u users.User
 	for i := 0; results.Next(); i++ {
-		var user User
-		err := results.StructScan(&user)
-		topTen = append(topTen, user)
+		err := results.StructScan(&u)
 		util.CheckErr(err)
+		tt = append(tt, u)
 	}
 
-	return topTen
+	return tt
 }
 
 func (d *Db) ReadStats(id int) Stats {

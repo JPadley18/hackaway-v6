@@ -20,3 +20,13 @@ func (u User) ToSqlAdd() string {
 		u.Elo,
 	)
 }
+
+func (u User) ToSqlUpdate() string {
+	return fmt.Sprintf(
+		"wins=%d, losses=%d, draws=%d, elo=%d",
+		u.Wins,
+		u.Losses,
+		u.Draws,
+		u.Elo,
+	)
+}
