@@ -2,9 +2,14 @@ package app
 
 import "cordle/internal/database"
 
-const dbKey = "conf/db-key.json"
+const (
+	dbKey = "conf/db-key.json"
+	discTok = "conf/discord-tok.json"
+)
 
 func Run() {
-	d := database.NewDb(dbKey)
-	defer d.Close()
+	db := database.NewDb(dbKey)
+	defer db.Close()
+
+	
 }
