@@ -1,28 +1,37 @@
 package config
 
 import (
-	"cordle/pkg/util"
 	"encoding/json"
 	"os"
+
+	"cordle/pkg/util"
 )
 
-// Config structs store configuration information after they are read
-type Config struct {
+// ConfigData structs store configuration information after they are read
+type ConfigData struct {
 	Token  string
 	Status string
+	Game   GameConfig
 }
 
-// LoadConfig returns a Config struct after reading configuration variables from a JSON file
-func LoadConfig(path string) Config {
+// GameConfig stores game specific settings
+type GameConfig struct {
+	ChallengeDuration int
+}
+
+// The path to read the config from
+const configPath = "config/config.json"
+
+// Globally available config data
+var Config ConfigData
+
+// When the module is first imported, load the config from a JSON file
+func init() {
 	// Open the configuration file
-	file, err := os.ReadFile(path)
+	file, err := os.ReadFile(configPath)
 	util.CheckErrMsg(err, "Failed to read config file")
 
-	// Create a new Config struct to return
-	ret := Config{}
 	// Decode JSON into the struct
-	err = json.Unmarshal(file, &ret)
+	err = json.Unmarshal(file, &Config)
 	util.CheckErrMsg(err, "Failed to decode JSON from config file")
-
-	return ret
 }
